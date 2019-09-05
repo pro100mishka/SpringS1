@@ -1,4 +1,4 @@
-package entity;
+package app.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -7,10 +7,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name = "users")
 @Data
 @Accessors(chain = true)
-public class Product {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,23 +20,19 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "cost")
-    private int cost;
-
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "operations",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private List<User> userList;
+    private List<Product> productList;
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", cost=" + cost +
                 '}';
     }
 }

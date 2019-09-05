@@ -10,9 +10,9 @@
         <property name="connection.password">ghj100uyjvbr</property>
         <property name="connection.pool_size">1</property>
         <property name="dialect">org.hibernate.dialect.PostgreSQL94Dialect</property>
-        <property name="show_sql">true</property>
+        <property name="show_sql">false</property>
         <property name="current_session_context_class">thread</property>
-        <mapping class="entity.Product"/>
-        <mapping class="entity.User"/>
+        <mapping class="app.entity.Product"/>
+        <mapping class="app.entity.User"/>
     </session-factory>
 </hibernate-configuration>

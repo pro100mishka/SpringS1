@@ -1,6 +1,8 @@
+package app;
 
-import context.MainApp;
-import service.ProductService;
+import app.context.MainApp;
+import app.service.ProductService;
+import app.service.UserService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,14 +10,14 @@ import java.io.IOException;
 public class MainMenu {
 
     private boolean startMark = true;
-    private boolean userWork = true;
     private BufferedReader inputReader;
     private ProductService productService;
+    private UserService userService;
 
     public MainMenu() {
         this.inputReader = MainApp.mainApp.getInputReader();
         this.productService = MainApp.mainApp.getProductService();
-        System.out.println(inputReader.hashCode());
+        this.userService = MainApp.mainApp.getUserService();
     }
 
     public void start() {
@@ -28,7 +30,7 @@ public class MainMenu {
                 System.out.print("Ввод: ");
                 String result = inputReader.readLine();
                 switch (result){
-                    case "1": userWork();
+                    case "1": userService.startService();
                         break;
                     case "2": productService.startService();
                         break;
@@ -38,12 +40,8 @@ public class MainMenu {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            MainApp.mainApp.shutdown();
         }
     }
-
-
-    private void userWork(){
-        System.out.println("userWork");
-    }
-
 }
