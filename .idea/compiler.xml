@@ -6,11 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="geekspring" />
+        <module name="HibernateTest" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="geekspring" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
