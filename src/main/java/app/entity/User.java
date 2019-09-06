@@ -20,7 +20,7 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(
             name = "operations",
             joinColumns = @JoinColumn(name = "user_id"),

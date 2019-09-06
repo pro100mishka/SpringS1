@@ -23,7 +23,7 @@ public class Product {
     @Column(name = "cost")
     private int cost;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(
             name = "operations",
             joinColumns = @JoinColumn(name = "product_id"),

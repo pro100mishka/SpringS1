@@ -18,8 +18,6 @@ public class UserDAO implements DAO {
         this.session = MainApp.mainApp.getSessionFactory().getCurrentSession();
     }
 
-
-
     @Override
     public void getAllList() {
         if (session == null || !session.isOpen()) init();

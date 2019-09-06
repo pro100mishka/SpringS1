@@ -1,6 +1,7 @@
 package app;
 
 import app.context.MainApp;
+import app.service.OperationService;
 import app.service.ProductService;
 import app.service.UserService;
 
@@ -13,11 +14,13 @@ public class MainMenu {
     private BufferedReader inputReader;
     private ProductService productService;
     private UserService userService;
+    private OperationService operationService;
 
     public MainMenu() {
         this.inputReader = MainApp.mainApp.getInputReader();
         this.productService = MainApp.mainApp.getProductService();
         this.userService = MainApp.mainApp.getUserService();
+        this.operationService = MainApp.mainApp.getOperationService();
     }
 
     public void start() {
@@ -26,7 +29,8 @@ public class MainMenu {
                 System.out.println("Введите: \n" +
                         "1 для работы с покупателями. \n" +
                         "2 для работы с продуктами. \n" +
-                        "3 для выхода.");
+                        "3 для отображения сделок. \n" +
+                        "4 для выхода.");
                 System.out.print("Ввод: ");
                 String result = inputReader.readLine();
                 switch (result){
@@ -34,7 +38,9 @@ public class MainMenu {
                         break;
                     case "2": productService.startService();
                         break;
-                    case "3": startMark = false;
+                    case "3": operationService.getOperationsDetails();
+                        break;
+                    case "4": startMark = false;
                         break;
                 }
             }

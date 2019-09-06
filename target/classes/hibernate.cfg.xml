@@ -14,5 +14,6 @@
         <property name="current_session_context_class">thread</property>
         <mapping class="app.entity.Product"/>
         <mapping class="app.entity.User"/>
+        <mapping class="app.entity.Operation"/>
     </session-factory>
 </hibernate-configuration>

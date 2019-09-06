@@ -1,7 +1,10 @@
 package app.context;
 
+import app.dao.DAO;
+import app.dao.OperationsDao;
 import app.dao.ProductDAO;
 import app.dao.UserDAO;
+import app.service.OperationService;
 import app.service.UserService;
 import lombok.Data;
 import org.hibernate.SessionFactory;
@@ -22,16 +25,20 @@ public class MainApp {
     private BufferedReader inputReader;
     private ProductService productService;
     private UserService userService;
-    private ProductDAO productDAO;
-    private UserDAO userDAO;
+    private OperationService operationService;
+    private DAO productDAO;
+    private DAO userDAO;
+    private OperationsDao operationsDao;
 
     private MainApp() {
         this.sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
         this.inputReader = new BufferedReader(new InputStreamReader(System.in));
         this.productService = new ProductService();
         this.userService = new UserService();
+        this.operationService = new OperationService();
         this.productDAO = new ProductDAO();
         this.userDAO = new UserDAO();
+        this.operationsDao = new OperationsDao();
     }
 
     public void shutdown(){
