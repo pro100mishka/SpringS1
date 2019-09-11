@@ -1,20 +1,18 @@
-package com.geekbrains.spring.lesson4.controllers;
+package com.ershov.spring1.lesson4.controllers;
 
-import com.geekbrains.spring.lesson4.entity.Product;
-import com.geekbrains.spring.lesson4.services.ProductService;
+
+import com.ershov.spring1.lesson4.entity.Product;
+import com.ershov.spring1.lesson4.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
 public class ProductController {
-
     private ProductService productService;
-
     @Autowired
     public void setProductService(ProductService productService) {
         this.productService = productService;
@@ -27,7 +25,7 @@ public class ProductController {
         return "product";
     }
 
-    @GetMapping("getMax")
+    @GetMapping("/getMax")
     public String getMax(Model model){
         model.addAttribute("products",productService.findMax());
         return "product";

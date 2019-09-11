@@ -1,6 +1,6 @@
-package com.geekbrains.spring.lesson4.repositories;
+package com.ershov.spring1.lesson4.repositories;
 
-import com.geekbrains.spring.lesson4.entity.Product;
+import com.ershov.spring1.lesson4.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

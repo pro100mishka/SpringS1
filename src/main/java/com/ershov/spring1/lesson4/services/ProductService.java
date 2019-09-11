@@ -1,7 +1,7 @@
-package com.geekbrains.spring.lesson4.services;
+package com.ershov.spring1.lesson4.services;
 
-import com.geekbrains.spring.lesson4.entity.Product;
-import com.geekbrains.spring.lesson4.repositories.ProductRepository;
+import com.ershov.spring1.lesson4.entity.Product;
+import com.ershov.spring1.lesson4.repositories.ProductRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

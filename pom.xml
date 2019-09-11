@@ -8,7 +8,7 @@
 		<version>2.1.8.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.geekbrains.spring</groupId>
+	<groupId>com.ershov.spring1</groupId>
 	<artifactId>lesson4</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>lesson4</name>

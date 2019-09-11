@@ -1,4 +1,4 @@
-package com.geekbrains.spring.lesson4.entity;
+package com.ershov.spring1.lesson4.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

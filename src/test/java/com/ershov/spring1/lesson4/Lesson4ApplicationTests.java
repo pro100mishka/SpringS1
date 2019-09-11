@@ -1,4 +1,4 @@
-package com.geekbrains.spring.lesson4;
+package com.ershov.spring1.lesson4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
