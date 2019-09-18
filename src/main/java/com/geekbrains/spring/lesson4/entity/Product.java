@@ -19,12 +19,9 @@ public class Product {
     @Column(name = "id")
     private long id;
 
-    @NonNull
     @Column(name = "title")
     private String title;
 
-    @NonNull
     @Column(name = "cost")
     private double cost;
-
 }

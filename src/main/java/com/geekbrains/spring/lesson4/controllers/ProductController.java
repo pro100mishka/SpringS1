@@ -44,6 +44,7 @@ public class ProductController {
         double currentMinPrice = minPrice.orElse(0.0);
         PriceFilter filter = new PriceFilter().setMaxPrice(currentMaxPrice).setMinPrice(currentMinPrice);
         Page<Product> productPage = productService.findPaginated(PageRequest.of(currentPage-1, currentSize, Sort.by(Sort.Direction.DESC,"cost")),filter);
+        model.addAttribute("products", productPage);
         int totalPages = productPage.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
@@ -51,7 +52,7 @@ public class ProductController {
                     .collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
-        model.addAttribute("products", productPage);
+
         model.addAttribute("productsList",productPage.getContent()); //вот тут совсем не понятно, отчего и почему.  внутри на страницу это не работает. почему там выдает List<T> и как там кастить))
         model.addAttribute("priceFilter",filter);
         return "product";
