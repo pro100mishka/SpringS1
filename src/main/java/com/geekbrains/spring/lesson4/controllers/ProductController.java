@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -33,17 +34,13 @@ public class ProductController {
 
     @GetMapping("/all")
     public String getStart(Model model,
-                           @ModelAttribute Optional<PriceFilter> priceFilter,
-                           @RequestParam("maxPrice") Optional<Double> maxPrice,
-                           @RequestParam("minPrice") Optional<Double> minPrice,
+                           @ModelAttribute PriceFilter priceFilter,
                            @RequestParam("page") Optional<Integer> page,
                            @RequestParam("size") Optional<Integer> size){
         int currentPage = page.orElse(1);
         int currentSize = size.orElse(5);
-        double currentMaxPrice = maxPrice.orElse(productService.getMaxPrice());
-        double currentMinPrice = minPrice.orElse(0.0);
-        PriceFilter filter = new PriceFilter().setMaxPrice(currentMaxPrice).setMinPrice(currentMinPrice);
-        Page<Product> productPage = productService.findPaginated(PageRequest.of(currentPage-1, currentSize, Sort.by(Sort.Direction.DESC,"cost")),filter);
+        if (priceFilter.getRange()==null) priceFilter.init();
+        Page<Product> productPage = productService.findPaginated(PageRequest.of(currentPage-1, currentSize, Sort.by(Sort.Direction.DESC,"cost")),priceFilter);
         int totalPages = productPage.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
@@ -51,9 +48,8 @@ public class ProductController {
                     .collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
-        model.addAttribute("products", productPage);
-        model.addAttribute("productsList",productPage.getContent()); //вот тут совсем не понятно, отчего и почему.  внутри на страницу это не работает. почему там выдает List<T> и как там кастить))
-        model.addAttribute("priceFilter",filter);
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("priceFilter", priceFilter);
         return "product";
     }
 }

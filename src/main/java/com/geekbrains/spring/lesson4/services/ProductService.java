@@ -27,11 +27,10 @@ public class ProductService {
     @PostConstruct
     private void init(){
         this.maxPrice = productRepository.findTopBy(Sort.by(Sort.Direction.DESC,"cost")).getCost();
-        System.out.println(maxPrice);
     }
 
     public Page<Product> findPaginated(PageRequest pageRequest, PriceFilter priceFilter) {
-        return productRepository.findAllByCostIsBetween(priceFilter.getMinPrice(),priceFilter.getMaxPrice(), pageRequest);
+        return productRepository.findAllByCostIsBetween(priceFilter.getRange()[0], priceFilter.getRange()[1], pageRequest);
     }
 
 }

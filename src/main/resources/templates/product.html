@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Пользователи</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/css/bootstrap-slider.css"/>
+    <link rel="stylesheet" href="/test.css">
 </head>
-
-<body>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <body>
     <div class="container">
         <h2>Продукты:</h2>
         <table class="table table-hover">
@@ -20,24 +20,55 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="product : ${productsList}">
+            <tr th:each="product : ${productPage}">
                 <td th:text="${product.title}"></td>
                 <td th:text="${product.cost}"></td>
             </tr>
             </tbody>
         </table>
-        <div>
+        Filter by price interval:
+        <div id="test" class="well" style="padding: 20px">
             <form th:action="@{/products/all}" th:object="${priceFilter}" method="get" >
-                <p>Max Price: <input type="number" th:field="*{maxPrice}" />
-                <p>Min Price: <input type="number" th:field="*{minPrice}" />
-                <input type="submit"  value="Filter">
+                        <div style="float: left; margin: 10px; width: 40px">
+                            <span id="l1" th:text="${priceFilter.getRange()[0]}"></span>
+                        </div>
+                        <div style="float: left; margin: 10px; width: 220px">
+                            <input class="slider"
+                                   id="ex2"
+                                   type="text"
+                                   data-slider-tooltip="show"
+                                   th:field="*{range}"/>
+                        </div>
+                        <div style="float: left; margin: 10px; width: 40px">
+                            <span id="l2" th:text="${priceFilter.getRange()[1]}"></span>
+                        </div>
+                    <input type="submit" class="btn btn-warning" value="Filter">
             </form>
+            <script th:inline="javascript">
+                var min = [[${priceFilter.getDefaultMin()}]];
+                var max = [[${priceFilter.getDefaultMax()}]];
+                var value = [[${priceFilter.getRange()}]];
+                var slider = new Slider('#ex2', {
+                    min: min,
+                    max: max,
+                    scale: 'logarithmic',
+                    value: value,
+                    step: 0.1,
+                    precision: 1,
+                    formatter: function(value) {
+                        return 'Current value: ' + value;
+                    }
+                });
+                slider.on('slide',function () {
+                    document.getElementById('l1').innerText = slider.getValue()[0];
+                    document.getElementById('l2').innerText = slider.getValue()[1];
+                });
+            </script>
         </div>
-        <div th:if="${products.totalPages > 0}" class="pagination"
-                th:each="pageNumber : ${pageNumbers}">-->
-                    <a th:href="@{/products/all (size=${products.size}, page=${pageNumber},maxPrice=${priceFilter.getMaxPrice()},minPrice=${priceFilter.getMinPrice()})}"
-                th:text=${pageNumber}
-                th:class="${products==products.number + 1} ? active"></a>
+        <div th:if="${productPage.totalPages > 0}" class="pagination"
+                th:each="pageNumber : ${pageNumbers}">
+                    <a class="btn btn-warning" th:href="@{/products/all (size=${productPage.size}, range=${priceFilter.getRange()},
+                    page=${pageNumber})}" th:text="${pageNumber}" th:class="${productPage==productPage.number + 1} ? active"></a>
         </div>
     </div>
 </body>
