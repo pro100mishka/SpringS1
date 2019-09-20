@@ -59,6 +59,7 @@
                         return 'Current value: ' + value;
                     }
                 });
+                // неработает что то
                 slider.on('slide',function () {
                     document.getElementById('l1').innerText = slider.getValue()[0];
                     document.getElementById('l2').innerText = slider.getValue()[1];
