@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div th:fragment="modal">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Add New Product</button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{/products/add}" th:object="${product}" method="post">
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Product Title</label>
+                                <input type="text" class="form-control" id="recipient-name" th:field="*{title}">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Product Cost</label>
+                                <input type="number" class="form-control" id="message-text" th:field="*{cost}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <input type="submit" class="btn btn-secondary" value="Add Product">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="pageSize">
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" th:text="'Page Size: ' + ${productPage.size}"></button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/products/all(range=${filter.getRange()}, word=${filter.getWord()}, defaultMax=${filter.getDefaultMax()}, defaultMin=${filter.getDefaultMin()},
+                size=5)}">5</a>
+                <a class="dropdown-item" th:href="@{/products/all(range=${filter.getRange()}, word=${filter.getWord()}, defaultMax=${filter.getDefaultMax()}, defaultMin=${filter.getDefaultMin()},
+                size=10)}">10</a>
+                <a class="dropdown-item" th:href="@{/products/all(range=${filter.getRange()}, word=${filter.getWord()}, defaultMax=${filter.getDefaultMax()}, defaultMin=${filter.getDefaultMin()},
+                size=20)}">20</a>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="table">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+            <tr>
+                <th class="col-md-3">Название</th>
+                <th class="col">Цена</th>
+                <th class="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${productPage}">
+                <td th:text="${product.title}"></td>
+                <td th:text="${product.cost}"></td>
+                <td>
+                    <a role="button" class="btn btn-info" th:href="@{'/products/edit/' + ${product.id}}">Edit</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:fragment="filter">
+        <form th:action="@{/products/all}" th:object="${filter}" method="get" >
+            <div class="form-group row">
+                <label for="inputWord" class="col-sm-2 col-form-label">Word For Search</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputWord" th:field="*{word}"  placeholder="Word For Search">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ex2" class="col-sm-2 col-form-label">Filter by price interval:</label>
+                <div class="col-sm-10">
+                    <div style="float: left; margin: 10px; width: 40px">
+                        <span id="l1" th:text="${filter.getRange()[0]}"></span>
+                    </div>
+                    <div style="float: left; margin: 10px; width: 220px">
+                        <input class="slider"
+                               id="ex2"
+                               type="text"
+                               data-slider-tooltip="show"
+                               th:field="*{range}"/>
+                    </div>
+                    <div style="float: left; margin: 10px; width: 40px">
+                        <span id="l2" th:text="${filter.getRange()[1]}"></span>
+                    </div>
+                    <input type="hidden" th:field="*{defaultMax}">
+                    <input type="hidden" th:field="*{defaultMin}">
+                    <input type="hidden" th:field="*{size}" th:value="${productPage.getSize()}">
+                </div>
+            </div>
+            <div>
+                <input type="submit" class="btn btn-warning" value="Filter">
+                <a role="button" class="btn btn-danger" th:href="@{/products/all (size=${productPage.getSize()} )}">Reset Filter</a>
+            </div>
+        </form>
+    </div>
+    <div th:fragment="pagination">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center" th:if="${productPage.totalPages > 0}">
+                <li class="page-item" th:classappend="${productPage.isFirst() ? 'disabled':''}">
+                    <a class="page-link" th:href="@{/products/all
+                    (range=${filter.getRange()}, word=${filter.getWord()}, defaultMax=${filter.getDefaultMax()}, defaultMin=${filter.getDefaultMin()},
+                    page=${productPage.getNumber()},size=${productPage.size})}" th:text="Previous">%</a>
+                </li>
+                <li class="page-item" th:classappend="${productPage.getNumber() + 1 == i ? 'active': ''}" th:each="i: ${#numbers.sequence(1,productPage.getTotalPages())}">
+                    <a class="page-link" th:href="@{/products/all
+                    (range=${filter.getRange()}, word=${filter.getWord()}, defaultMax=${filter.getDefaultMax()}, defaultMin=${filter.getDefaultMin()},
+                    page=${i},size=${productPage.size})}" th:text="${i}">%</a>
+                </li>
+                <li class="page-item" th:classappend="${productPage.isLast() ? 'disabled':''}">
+                    <a class="page-link" th:href="@{/products/all
+                    (range=${filter.getRange()}, word=${filter.getWord()}, defaultMax=${filter.getDefaultMax()}, defaultMin=${filter.getDefaultMin()},
+                    page=${productPage.getNumber()+2},size=${productPage.size})}" th:text="Next">%</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</body>
+</html>
