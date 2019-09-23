@@ -46,9 +46,10 @@ public class ProductController {
                            @RequestParam("size") Optional<Integer> size){
         int currentPage = page.orElse(1);
         int currentSize = size.orElse(5);
-        Specification<Product> specification = specService.getByFilter(specService.checkFilter(filter));
-        PageRequest request = PageRequest.of(currentPage-1, currentSize, Sort.by(Sort.Direction.DESC,"cost"));
 
+        Specification<Product> specification = specService.getByFilter(specService.checkFilter(filter,currentSize));
+        PageRequest request = PageRequest.of(currentPage-1, currentSize, Sort.by(Sort.Direction.DESC,"cost"));
+        System.out.println(filter);
         Page<Product> productPage = productService.findAllByPagingAndFiltering(specification,request);
         int totalPages = productPage.getTotalPages();
         if (totalPages > 0) {

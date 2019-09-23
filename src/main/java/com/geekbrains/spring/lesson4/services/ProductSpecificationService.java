@@ -21,9 +21,9 @@ public class ProductSpecificationService {
         this.productService = productService;
     }
 
-    public Filter checkFilter(Filter filter){
+    public Filter checkFilter(Filter filter,int size){
         log.info(filter);
-        if (filter.getRange() == null) return filter.init(productService.getMaxPrice());
+        if (filter.getRange() == null) return filter.init(productService.getMaxPrice(),size);
         return filter;
     }
 

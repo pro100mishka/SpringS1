@@ -97,12 +97,12 @@
                     </div>
                     <input type="hidden" th:field="*{defaultMax}">
                     <input type="hidden" th:field="*{defaultMin}">
-                    <input type="hidden" th:field="*{size}" th:value="${productPage.getSize()}">
+                    <input type="hidden" th:field="*{size}" th:value="${productPage.size}">
                 </div>
             </div>
             <div>
                 <input type="submit" class="btn btn-warning" value="Filter">
-                <a role="button" class="btn btn-danger" th:href="@{/products/all (size=${productPage.getSize()} )}">Reset Filter</a>
+                <a role="button" class="btn btn-danger" th:href="@{/products/all (size=${productPage.size} )}">Reset Filter</a>
             </div>
         </form>
     </div>
