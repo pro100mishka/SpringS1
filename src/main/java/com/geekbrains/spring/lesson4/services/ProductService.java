@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -34,13 +35,24 @@ public class ProductService {
         return productRepository.findAll(specification,pageable);
     }
 
-    public Product findById(Long id){
-        return productRepository.findById(id).get();
+    public Optional<Product> findById(Long id){
+        return productRepository.findById(id);
     }
 
-    public boolean update(Product product){
-        boolean temp = productRepository.save(product)!=null;
-        init();
-        return temp;
+    public Product update(Product product){
+        if (maxPrice<product.getCost()) maxPrice = product.getCost();
+        return productRepository.save(product);
+    }
+
+    public List<Product> findAllByFiltering(Specification<Product> specification){
+        return productRepository.findAll(specification);
+    }
+
+    public List<Product> findAll(){
+        return (List<Product>) productRepository.findAll();
+    }
+
+    public void delete(Long id){
+        productRepository.deleteById(id);
     }
 }

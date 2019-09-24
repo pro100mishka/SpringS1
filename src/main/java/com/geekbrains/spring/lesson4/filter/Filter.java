@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 @Data
 @Accessors(chain = true)
 @Log4j2
+@NoArgsConstructor
 public class Filter {
 
     private String word;

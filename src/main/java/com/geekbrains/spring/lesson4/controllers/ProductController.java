@@ -38,7 +38,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/all")
+    @GetMapping(value = "/all")
     public String getStart(Model model,
                            @ModelAttribute Filter filter,
                            @ModelAttribute Product product,
@@ -63,22 +63,29 @@ public class ProductController {
         model.addAttribute("filter", filter);
         return "product";
     }
-    @GetMapping("/edit/{id}")
+
+    @GetMapping(value = "/test")
+    @ResponseBody
+    public Filter getFilter(){
+        return new Filter();
+    }
+
+    @GetMapping(value = "/edit/{id}")
     public String edit(Model model,
                        @PathVariable(name = "id") Long id){
-        Product product = productService.findById(id);
+        Product product = productService.findById(id).get();  //тут Тогда надо написать экспешен.
         model.addAttribute("product",product);
         return "edit_product";
     }
-    @PostMapping("/edit")
+    @PostMapping(value = "/edit")
     public String update(@ModelAttribute(name="product") Product product){
-        log.info("Product: "+product+" Success update: "+productService.update(product));
+        log.info("Product: "+product+" Success update: "+productService.update(product));  // id нет ошибка
         return "redirect:/products/all";
     }
 
-    @PostMapping("/add")
+    @PostMapping(value = "/add")
     public String add(@ModelAttribute(name = "product") Product product){
-        log.info("Product: "+product+" Success add: "+productService.update(product));
+        log.info("Product: "+product+" Success add: "+productService.update(product));  //id есть ошибка
         return "redirect:/products/all";
     }
 }

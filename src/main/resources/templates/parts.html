@@ -117,7 +117,7 @@
                 <li class="page-item" th:classappend="${productPage.getNumber() + 1 == i ? 'active': ''}" th:each="i: ${#numbers.sequence(1,productPage.getTotalPages())}">
                     <a class="page-link" th:href="@{/products/all
                     (range=${filter.getRange()}, word=${filter.getWord()}, defaultMax=${filter.getDefaultMax()}, defaultMin=${filter.getDefaultMin()},
-                    page=${i},size=${productPage.size})}" th:text="${i}">%</a>
+                    page=${i},size=${productPage.size},filer=${filter})}" th:text="${i}">%</a>
                 </li>
                 <li class="page-item" th:classappend="${productPage.isLast() ? 'disabled':''}">
                     <a class="page-link" th:href="@{/products/all
