@@ -13,16 +13,108 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.js"></script>
     <div class="container">
         <div class="btn-group btn-group-lg float-right" role="group" aria-label="Basic example">
-            <div th:replace="/parts :: modal"></div>
-            <div th:replace="/parts :: pageSize"></div>
+            <div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Add New Product</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/products/add}" th:object="${product}" method="post">
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Product Title</label>
+                                        <input type="text" class="form-control" id="recipient-name" th:field="*{title}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Product Cost</label>
+                                        <input type="number" class="form-control" id="message-text" th:field="*{cost}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <input type="submit" class="btn btn-secondary" value="Add Product">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false" th:text="'Page Size: ' + ${productPage.size}"></button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" th:href="@{/products/all(size=5)}">5</a>
+                        <a class="dropdown-item" th:href="@{/products/all(size=10)}">10</a>
+                        <a class="dropdown-item" th:href="@{/products/all(size=20)}">20</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <h2>Продукты:</h2>
-        <div th:replace="/parts :: table"></div>
-        <div th:replace="/parts :: filter"></div>
+        <div>
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th class="col-md-3">Название</th>
+                    <th class="col">Цена</th>
+                    <th class="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${productPage}">
+                    <td th:text="${product.title}"></td>
+                    <td th:text="${product.cost}"></td>
+                    <td>
+                        <a role="button" class="btn btn-info" th:href="@{'/products/edit/' + ${product.id}}">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <form th:action="@{/products/all}" method="GET" >
+                <div class="form-group row">
+                    <label for="inputWord" class="col-sm-2 col-form-label">Word For Search</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputWord" th:value="${param.word !=null} ? ${param.word}" th:name="word" placeholder="Word For Search">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ex2" class="col-sm-2 col-form-label">Filter by price interval:</label>
+                    <div class="col-sm-10">
+                        <div style="float: left; margin: 10px; width: 40px">
+                            <span id="l1" th:text="${range[0]}"></span>
+                        </div>
+                        <div style="float: left; margin: 10px; width: 220px">
+                            <input class="slider"
+                                   data-slider-tooltip="show"
+                                   id="ex2"
+                                   th:name="range"
+                                   th:value="${param.range !=null} ? ${param.range}" type="text">
+                        </div>
+                        <div style="float: left; margin: 10px; width: 40px">
+                            <span id="l2" th:text="${range[1]}"></span>
+                        </div>
+                        <input type="hidden" th:value="${productPage.size}" th:name="size">
+                    </div>
+                </div>
+                <div>
+                    <input type="submit" class="btn btn-warning" value="Filter">
+                    <a role="button" class="btn btn-danger" th:href="@{/products/all (size=${productPage.size} )}">Reset Filter</a>
+                </div>
+            </form>
+        </div>
         <script th:inline="javascript">
-            var min = [[${filter.getDefaultMin()}]];
-            var max = [[${filter.getDefaultMax()}]];
-            var value = [[${filter.getRange()}]];
+            var min = [[${defaultMin}]];
+            var max = [[${defaultMax}]];
+            var value = [[${range}]];
             var slider = new Slider('#ex2', {
                 min: min,
                 max: max,
@@ -30,17 +122,30 @@
                 value: value,
                 step: 0.1,
                 precision: 1,
-                formatter: function formatter(value){
-                    return 'Current value: ' + value;
-                }
             });
-                // неработает что то тултипы
             slider.on('change',function () {
                 document.getElementById('l1').innerText = slider.getValue()[0];
                 document.getElementById('l2').innerText = slider.getValue()[1];
             });
         </script>
-        <div th:replace="/parts :: pagination"></div>
+        <div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" th:if="${productPage.totalPages > 0}">
+                    <li class="page-item" th:classappend="${productPage.isFirst() ? 'disabled':''}">
+                        <a class="page-link" th:href="@{/products/all
+                    (page=${productPage.getNumber()},size=${productPage.size})}" th:text="Previous">%</a>
+                    </li>
+                    <li class="page-item" th:classappend="${productPage.getNumber() + 1 == i ? 'active': ''}" th:each="i: ${#numbers.sequence(1,productPage.getTotalPages())}">
+                        <a class="page-link" th:href="@{/products/all
+                    (page=${i},size=${productPage.size}}" th:text="${i}">%</a>
+                    </li>
+                    <li class="page-item" th:classappend="${productPage.isLast() ? 'disabled':''}">
+                        <a class="page-link" th:href="@{/products/all
+                    (page=${productPage.getNumber()+2},size=${productPage.size})}" th:text="Next">%</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
     </body>
 </html>

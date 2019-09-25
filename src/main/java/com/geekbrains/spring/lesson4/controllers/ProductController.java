@@ -1,7 +1,7 @@
 package com.geekbrains.spring.lesson4.controllers;
 
 import com.geekbrains.spring.lesson4.entity.Product;
-import com.geekbrains.spring.lesson4.filter.Filter;
+import com.geekbrains.spring.lesson4.filter.ProductFilterService;
 import com.geekbrains.spring.lesson4.services.ProductService;
 import com.geekbrains.spring.lesson4.services.ProductSpecificationService;
 import lombok.extern.log4j.Log4j2;
@@ -14,11 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
-
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/products")
@@ -26,11 +23,11 @@ import java.util.stream.IntStream;
 public class ProductController {
 
     private ProductService productService;
-    private ProductSpecificationService specService;
+    private ProductFilterService filterService;
 
     @Autowired
-    public void setSpecService(ProductSpecificationService specService) {
-        this.specService = specService;
+    public void setFilterService(ProductFilterService filterService) {
+        this.filterService = filterService;
     }
 
     @Autowired
@@ -39,36 +36,28 @@ public class ProductController {
     }
 
     @GetMapping(value = "/all")
-    public String getStart(Model model,
-                           @ModelAttribute Filter filter,
+    public String getStart(Model model, HttpServletRequest f,
                            @ModelAttribute Product product,
-                           @RequestParam("page") Optional<Integer> page,
-                           @RequestParam("size") Optional<Integer> size){
+                           @RequestParam(value = "word",required = false) String word,
+                          // @RequestParam(value = "range",required = false) Double[] range,
+                           @RequestParam(value = "page") Optional<Integer> page,
+                           @RequestParam(value = "size") Optional<Integer> size){
         int currentPage = page.orElse(1);
         int currentSize = size.orElse(5);
 
-        Specification<Product> specification = specService.getByFilter(specService.checkFilter(filter,currentSize));
+        filterService.checkFilter(f);
+        Specification<Product> specification = Specification.where(null);
         PageRequest request = PageRequest.of(currentPage-1, currentSize, Sort.by(Sort.Direction.DESC,"cost"));
-        System.out.println(filter);
         Page<Product> productPage = productService.findAllByPagingAndFiltering(specification,request);
-        int totalPages = productPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+       // if (range==null) range=new Double[]{0.0,productService.getMaxPrice()};
+      //  model.addAttribute("range",range);
         model.addAttribute("newProduct",product);
         model.addAttribute("productPage", productPage);
-        model.addAttribute("filter", filter);
+        model.addAttribute("defaultMin", 0.0);
+        model.addAttribute("defaultMax", productService.getMaxPrice());
         return "product";
     }
 
-    @GetMapping(value = "/test")
-    @ResponseBody
-    public Filter getFilter(){
-        return new Filter();
-    }
 
     @GetMapping(value = "/edit/{id}")
     public String edit(Model model,

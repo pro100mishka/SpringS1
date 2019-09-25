@@ -3,7 +3,7 @@ package com.geekbrains.spring.lesson4.rest_api;
 import com.geekbrains.spring.lesson4.entity.Product;
 import com.geekbrains.spring.lesson4.errors_handler.exceptions.InvalidStateOfObjectException;
 import com.geekbrains.spring.lesson4.errors_handler.exceptions.NotFoundException;
-import com.geekbrains.spring.lesson4.filter.Filter;
+import com.geekbrains.spring.lesson4.filter.ProductFilterService;
 import com.geekbrains.spring.lesson4.services.ProductService;
 import com.geekbrains.spring.lesson4.services.ProductSpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class RestApiProductController {
     @GetMapping(value = "/")
     public List<Product> getAll(@RequestParam (name = "range", required = false) Double[] range,
                                 @RequestParam (name = "word", required = false) String word){
-        return service.findAllByFiltering(specificationService.getByFilter(new Filter()
+        return service.findAllByFiltering(specificationService.getByFilter(new ProductFilterService()
                 .setRange(range)
                 .setWord(word)));
     }
