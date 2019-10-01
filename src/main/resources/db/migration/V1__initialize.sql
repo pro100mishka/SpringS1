@@ -42,9 +42,9 @@ VALUES
 (1, 2),
 (1, 3);
 
-DROP TABLE IF EXISTS products;
-CREATE TABLE products (id bigserial, title varchar(255), price int);
-INSERT INTO products (title, price) VALUES
+DROP TABLE IF EXISTS product;
+CREATE TABLE product (id bigserial, title varchar(255), cost int);
+INSERT INTO product (title, cost) VALUES
 ('Cheese', 320),
 ('Milk', 90),
 ('Apples', 120);
