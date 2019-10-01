@@ -9,11 +9,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body>
-    <H1>App</H1>
     <div class="container">
-        <form th:action="@{/products/}"  method="GET">
-            <button>Продукты</button>
-        </form>
+        <div th:replace="~{navigation :: navigation(Home)}"></div>
+        <H1>App</H1>
     </div>
 </body>
 </html>

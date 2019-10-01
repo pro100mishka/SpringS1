@@ -1,8 +1,9 @@
 package com.geekbrains.spring.market.controllers;
 
+
 import com.geekbrains.spring.market.entity.Product;
-import com.geekbrains.spring.market.services.filter_services.ProductFilterAndPageService;
 import com.geekbrains.spring.market.services.ProductService;
+import com.geekbrains.spring.market.services.filter_services.ProductFilterAndPageService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
+@RequestMapping("/shop")
 @Controller
-@RequestMapping("/products")
 @Log4j2
-public class ProductController {
+public class ShopController {
+
 
     private ProductService productService;
     private ProductFilterAndPageService filterAndPageService;
@@ -46,26 +47,6 @@ public class ProductController {
         model.addAttribute("filter", filterAndPageService.getFilter());
         model.addAttribute("newProduct", product);
         model.addAttribute("productPage", productPage);
-        return "product";
-    }
-
-
-    @GetMapping(value = "/edit/{id}")
-    public String edit(Model model,
-                       @PathVariable(name = "id") Long id){
-        Product product = productService.findById(id).get();  //тут Тогда надо написать экспешен.
-        model.addAttribute("product",product);
-        return "edit_product";
-    }
-    @PostMapping(value = "/edit")
-    public String update(@ModelAttribute(name="product") Product product){
-        log.info("Product: "+product+" Success update: "+productService.update(product));  // id нет ошибка
-        return "redirect:/products/";
-    }
-
-    @PostMapping(value = "/add")
-    public String add(@ModelAttribute(name = "product") Product product){
-        log.info("Product: "+product+" Success add: "+productService.update(product));  //id есть ошибка
-        return "redirect:/products/";
+        return "shop";
     }
 }

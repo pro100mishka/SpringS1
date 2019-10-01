@@ -34,8 +34,8 @@ VALUES
 
 INSERT INTO users (username, password, first_name, last_name, email,phone)
 VALUES
-('admin','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com','+79881111111');
-
+('admin','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com','+79881111111'),
+('user','$2a$10$6wIxbW2zfUZuEqEj6f/8o.dfa7DSo9zVOhspAPhVulAEbKoR80jMe','User','User','user@gmail.com','+79529395258');
 INSERT INTO users_roles (user_id, role_id)
 VALUES
 (1, 1),

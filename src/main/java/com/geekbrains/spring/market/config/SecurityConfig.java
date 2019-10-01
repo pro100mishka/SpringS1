@@ -33,10 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasAnyRole("ADMIN", "MANAGER")
-                .antMatchers("/admin/products/**").hasAnyRole("ADMIN", "MANAGER")
-                .antMatchers("/admin/users/**").hasRole("ADMIN")
-                .antMatchers("/shop/order/**").authenticated()
+                .antMatchers("/products/").hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers("/products/**").hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers("/shop/").hasAnyRole("USER")
+                .antMatchers("/shop/**").hasAnyRole("USER")
                 .antMatchers("/profile/**").authenticated()
                 .anyRequest().permitAll()
                 .and()
@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .logoutSuccessUrl("/shop")
+                .logoutSuccessUrl("/shop/")
                 .permitAll();
     }
 
