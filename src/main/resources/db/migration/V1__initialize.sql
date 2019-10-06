@@ -35,16 +35,42 @@ VALUES
 INSERT INTO users (username, password, first_name, last_name, email,phone)
 VALUES
 ('admin','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com','+79881111111'),
-('user','$2a$10$6wIxbW2zfUZuEqEj6f/8o.dfa7DSo9zVOhspAPhVulAEbKoR80jMe','User','User','user@gmail.com','+79529395258');
+('user','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','User','User','user@gmail.com','+79529395258');
+
 INSERT INTO users_roles (user_id, role_id)
 VALUES
 (1, 1),
 (1, 2),
-(1, 3);
+(1, 3),
+(2, 1);
 
 DROP TABLE IF EXISTS product;
-CREATE TABLE product (id bigserial, title varchar(255), cost int);
+CREATE TABLE product (
+    id bigserial,
+    title varchar(255),
+    cost int,
+    PRIMARY KEY (id));
+
 INSERT INTO product (title, cost) VALUES
 ('Cheese', 320),
 ('Milk', 90),
 ('Apples', 120);
+
+DROP TABLE IF EXISTS carts;
+CREATE table carts(
+                      id bigserial,
+                      user_id int REFERENCES users (id),
+                      PRIMARY key (id));
+INSERT INTO carts (user_id) VALUES
+(1);
+
+
+DROP TABLE IF EXISTS cart_item;
+CREATE TABLE cart_item (
+                           id bigserial,
+                           cart_id int REFERENCES carts(id),
+                           product_id int REFERENCES product (id),
+                           count int,
+                           PRIMARY KEY (id));
+INSERT INTO cart_item (cart_id, product_id, count) VALUES
+(1,1,3);
