@@ -64,13 +64,14 @@ CREATE table carts(
 INSERT INTO carts (user_id) VALUES
 (1);
 
-
 DROP TABLE IF EXISTS cart_item;
 CREATE TABLE cart_item (
                            id bigserial,
                            cart_id int REFERENCES carts(id),
                            product_id int REFERENCES product (id),
-                           count int,
                            PRIMARY KEY (id));
-INSERT INTO cart_item (cart_id, product_id, count) VALUES
-(1,1,3);
+
+INSERT INTO cart_item (cart_id, product_id) VALUES
+(1,1),
+(1,1);
+

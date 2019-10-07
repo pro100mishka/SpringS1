@@ -23,6 +23,11 @@ public class Cart {
     @JoinColumn (name = "user_id")
     private User user;
 
-    @OneToMany (mappedBy = "cart", fetch = FetchType.EAGER)
-    private List<CartItem> cartItems;
+    @OneToMany
+    @JoinTable(
+            name="cart_item",
+            joinColumns = @JoinColumn( name="cart_id"),
+            inverseJoinColumns = @JoinColumn( name="product_id")
+    )
+    private List<Product> products;
 }

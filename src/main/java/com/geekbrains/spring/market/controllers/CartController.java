@@ -1,8 +1,8 @@
 package com.geekbrains.spring.market.controllers;
 
 import com.geekbrains.spring.market.entity.Cart;
-import com.geekbrains.spring.market.entity.CartItem;
 import com.geekbrains.spring.market.entity.Product;
+import com.geekbrains.spring.market.errors_handler.exceptions.NotFoundException;
 import com.geekbrains.spring.market.services.CartService;
 import com.geekbrains.spring.market.services.ProductService;
 import com.geekbrains.spring.market.util.TempCart;
@@ -17,7 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.groupingBy;
 
 @Controller
 @Log4j2
@@ -46,28 +53,34 @@ public class CartController {
     @GetMapping(value = "/add/{id}")
     public void addToCart(HttpServletRequest request, HttpServletResponse response,
                           @PathVariable(name = "id") Long id) throws IOException {
-        Product product = productService.findById(id).get();
-        if (request.getRemoteUser()!=null){
-//            cartService.saveCartItem
-        } else {
-            tempCart.addToCart(product);
+        Product product = productService.findById(id).orElseThrow(()->new NotFoundException("Product by id: "+id+" not found."));
+        if (tempCart.getCart()!=null){
+            cartService.saveToCart(product,tempCart.getCart());
         }
+        tempCart.addToCart(product);
         response.sendRedirect(request.getHeader("referer"));
     }
 
     @GetMapping
     public String showCart(Model model,
                            HttpServletRequest request){
-        Map<Product, CartItem> mapForPage = cartService.getCartItemsMap(tempCart);
-        log.info(mapForPage);
-        model.addAttribute("cartList", mapForPage);
+        Map<Product, Long> productCountMap = tempCart.getCart()
+                .getProducts()
+                .stream()
+                .collect(groupingBy(Function.identity(), counting()));
+        model.addAttribute("cartList",productCountMap);
         return "cart";
     }
 
     @GetMapping(value = "/bind")
     public String bindUserForCart(HttpServletRequest request){
         Cart cart = cartService.getCart(request.getRemoteUser());
+        log.info("Carts: " +cart.getProducts().toString());
         tempCart.setCart(cart);
+        if (!tempCart.getTempProducts().isEmpty()){
+            cart.getProducts().addAll(tempCart.getTempProducts());
+            cartService.saveCart(cart);
+        }
         return "redirect:/shop";
     }
 }
