@@ -27,9 +27,9 @@
                     </thead>
                     <tbody>
                     <tr th:each="cartItem : ${cartList}">
-                        <td th:text="${cartItem.getKey().getTitle()}"></td>
-                        <td th:text="${cartItem.getKey().getCost()}"></td>
-                        <td th:text="${cartItem.getValue()}"></td>
+                        <td th:text="${cartItem.getKey()!=null} ? ${cartItem.getKey().getTitle()}"></td>
+                        <td th:text="${cartItem.getKey()!=null} ? ${cartItem.getKey().getCost()}"></td>
+                        <td th:text="${cartItem.getValue()!=null} ? ${cartItem.getValue()}"></td>
                     </tr>
                     </tbody>
                 </table>

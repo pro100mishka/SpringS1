@@ -4,11 +4,18 @@ import com.geekbrains.spring.market.entity.Cart;
 import com.geekbrains.spring.market.entity.Product;
 import com.geekbrains.spring.market.entity.User;
 import com.geekbrains.spring.market.repositories.CartRepository;
+import com.geekbrains.spring.market.util.TempCart;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
 
 
 @Service
@@ -16,12 +23,6 @@ import java.util.ArrayList;
 public class CartService {
     private CartRepository cartRepository;
     private UserServiceImpl userService;
-    private CartItemService cartItemService;
-
-    @Autowired
-    public void setCartItemService(CartItemService cartItemService) {
-        this.cartItemService = cartItemService;
-    }
 
     @Autowired
     public void setCartRepository(CartRepository cartRepository) {
@@ -37,7 +38,7 @@ public class CartService {
         User user = userService.findByUsername(username);
         log.info("User search cart: "+user.getUsername());
         Cart cart = cartRepository.findByUser(user).orElse(getNewCartByUser(user));
-        if (cart.getId()!=null){
+        if (cart.getId()==null){
             log.info("For User: "+ user.getUsername()+" create cart: " + cart.getProducts());
             return cartRepository.save(cart);
         }
@@ -49,12 +50,30 @@ public class CartService {
         return new Cart().setUser(user).setProducts(new ArrayList<>());
     }
 
-    public void saveToCart(Product product,Cart cart){
-        log.info("Product add to cart: "+cartItemService.save(product, cart).getProduct());
+    public Cart saveToCart(Product product,Cart cart){
+        cart.getProducts().add(product);
+        log.info("Product add to cart: " + product);
+        return saveCart(cart);
     }
 
-    public void saveCart(Cart cart){
-        cartRepository.save(cart);
+    public Cart saveCart(Cart cart){
+        return cartRepository.save(cart);
+    }
+
+    public Map<Product,Long> getProductMap(TempCart tempCart){
+        Map<Product, Long> productCountMap = null;
+        if  (tempCart.getCart()!=null){
+            productCountMap = listToMap(tempCart.getCart().getProducts());
+        } else {
+            productCountMap = listToMap(tempCart.getTempProducts());
+        }
+        return productCountMap;
+    }
+
+    private Map<Product,Long> listToMap(List<Product> productList){
+        return productList
+                .stream()
+                .collect(groupingBy(Function.identity(), counting()));
     }
 }
 

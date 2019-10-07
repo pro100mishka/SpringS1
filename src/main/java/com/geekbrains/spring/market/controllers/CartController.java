@@ -55,19 +55,15 @@ public class CartController {
                           @PathVariable(name = "id") Long id) throws IOException {
         Product product = productService.findById(id).orElseThrow(()->new NotFoundException("Product by id: "+id+" not found."));
         if (tempCart.getCart()!=null){
-            cartService.saveToCart(product,tempCart.getCart());
+            tempCart.setCart(cartService.saveToCart(product,tempCart.getCart()));
         }
         tempCart.addToCart(product);
         response.sendRedirect(request.getHeader("referer"));
     }
 
     @GetMapping
-    public String showCart(Model model,
-                           HttpServletRequest request){
-        Map<Product, Long> productCountMap = tempCart.getCart()
-                .getProducts()
-                .stream()
-                .collect(groupingBy(Function.identity(), counting()));
+    public String showCart(Model model){
+        Map<Product, Long> productCountMap = cartService.getProductMap(tempCart);
         model.addAttribute("cartList",productCountMap);
         return "cart";
     }
