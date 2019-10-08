@@ -3,6 +3,7 @@ package com.geekbrains.spring.market.controllers;
 import com.geekbrains.spring.market.entity.Cart;
 import com.geekbrains.spring.market.entity.CartItem;
 import com.geekbrains.spring.market.entity.Product;
+import com.geekbrains.spring.market.entity.TempUser;
 import com.geekbrains.spring.market.errors_handler.exceptions.NotFoundException;
 import com.geekbrains.spring.market.services.CartService;
 import com.geekbrains.spring.market.services.ProductService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +61,7 @@ public class CartController {
     @GetMapping
     public String showCart(Model model){
         Map<Product, CartItem> productCountMap = cartService.getMapForPage(tempCart);
+        model.addAttribute("tempUser", new TempUser());
         model.addAttribute("cartList", productCountMap);
         return "cart";
     }
@@ -70,4 +73,5 @@ public class CartController {
         cartService.addTempCartToCart(tempCart.setCart(cart));
         return "redirect:/shop";
     }
+
 }

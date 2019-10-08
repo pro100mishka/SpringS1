@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "cart_item")
@@ -26,6 +27,11 @@ public class CartItem {
 
     @Column(name = "quantity")
     private int quantity;
+
+
+    public BigDecimal getTotalPrice() {
+        return new BigDecimal(product.getCost()*quantity);
+    }
 
     @Override
     public String toString() {
