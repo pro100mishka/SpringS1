@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.List;
-
+import java.util.Map;
 
 
 @Entity
@@ -23,11 +23,15 @@ public class Cart {
     @JoinColumn (name = "user_id")
     private User user;
 
-    @OneToMany
-    @JoinTable(
-            name="cart_item",
-            joinColumns = @JoinColumn( name="cart_id"),
-            inverseJoinColumns = @JoinColumn( name="product_id")
-    )
-    private List<Product> products;
+    @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
+    @MapKeyJoinColumn(name = "product_id")
+    private Map<Product,CartItem> cartItemMap;
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "user=" + user +
+                ", cartItemMap=" + cartItemMap +
+                '}';
+    }
 }

@@ -23,4 +23,18 @@ public class CartItem {
     @ManyToOne
     @JoinColumn (name = "product_id")
     private Product product;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+    @Override
+    public String toString() {
+        Long cartId = null;
+        if (cart!=null) cartId = cart.getId();
+        return "CartItem{" +
+                "cart=" + cartId +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

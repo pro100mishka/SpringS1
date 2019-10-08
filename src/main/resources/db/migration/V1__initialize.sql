@@ -67,11 +67,12 @@ INSERT INTO carts (user_id) VALUES
 DROP TABLE IF EXISTS cart_item;
 CREATE TABLE cart_item (
                            id bigserial,
+                           quantity INT NOT NULL,
                            cart_id int REFERENCES carts(id),
                            product_id int REFERENCES product (id),
                            PRIMARY KEY (id));
 
-INSERT INTO cart_item (cart_id, product_id) VALUES
-(1,1),
-(1,1);
+INSERT INTO cart_item (cart_id, product_id, quantity) VALUES
+(1,1,2);
+
 
