@@ -13,7 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @RequestMapping("/shop")
 @Controller

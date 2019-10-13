@@ -68,8 +68,22 @@ DROP TABLE IF EXISTS cart_item;
 CREATE TABLE cart_item (
                            id bigserial,
                            quantity INT NOT NULL,
-                           cart_id int REFERENCES carts(id),
-                           product_id int REFERENCES product (id),
+                           cart_id int REFERENCES carts(id) ON DELETE CASCADE,,
+                           product_id int REFERENCES product (id) ON DELETE CASCADE,,
+                           PRIMARY KEY (id));
+
+DROP TABLE IF EXISTS cookie_carts;
+CREATE table cookie_carts(
+                      id bigserial,
+                      session_id varchar(255),
+                      PRIMARY key (id));
+
+DROP TABLE IF EXISTS cookie_cart_item;
+CREATE TABLE cookie_cart_item (
+                           id bigserial,
+                           quantity INT NOT NULL,
+                           cart_id int REFERENCES cookie_carts(id) ON DELETE CASCADE,
+                           product_id int REFERENCES product (id) ON DELETE CASCADE,,
                            PRIMARY KEY (id));
 
 INSERT INTO cart_item (cart_id, product_id, quantity) VALUES

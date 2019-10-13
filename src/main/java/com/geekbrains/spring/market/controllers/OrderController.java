@@ -1,8 +1,7 @@
 package com.geekbrains.spring.market.controllers;
 
-import com.geekbrains.spring.market.entity.Product;
 import com.geekbrains.spring.market.entity.TempUser;
-import com.geekbrains.spring.market.util.TempCart;
+import com.geekbrains.spring.market.util.CookieUserHandler;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,17 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Log4j2
 public class OrderController {
 
-    private TempCart tempCart;
+    private CookieUserHandler cookieUserHandler;
 
     @Autowired
-    public void setTempCart(TempCart tempCart) {
-        this.tempCart = tempCart;
+    public void setCookieUserHandler(CookieUserHandler cookieUserHandler) {
+        this.cookieUserHandler = cookieUserHandler;
     }
 
     @PostMapping("tempUserOrder")
     public String confirmationOrderFromTempUser(@ModelAttribute TempUser tempUser){
         log.info("User confirmation Order"+tempUser);
-        log.info("Product in order: "+tempCart.getTempProducts());
         return "redirect:/shop";
     }
 }
