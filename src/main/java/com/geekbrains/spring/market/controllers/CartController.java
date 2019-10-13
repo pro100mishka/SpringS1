@@ -60,7 +60,7 @@ public class CartController {
 
     @GetMapping
     public String showCart(Model model){
-        Map productCountMap = cartService
+        Map <Product, CartItems> productCountMap = cartService
                 .getMapForPage(cookieUserHandler);
         model.addAttribute("tempUser", new TempUser());
         model.addAttribute("cartList", productCountMap);

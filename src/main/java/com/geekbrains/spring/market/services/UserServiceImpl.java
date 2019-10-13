@@ -1,8 +1,10 @@
 package com.geekbrains.spring.market.services;
 
 import com.geekbrains.spring.market.entity.Role;
+import com.geekbrains.spring.market.entity.TempUser;
 import com.geekbrains.spring.market.entity.User;
 import com.geekbrains.spring.market.repositories.RoleRepository;
+import com.geekbrains.spring.market.repositories.TempUserRepository;
 import com.geekbrains.spring.market.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +23,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder passwordEncoder;
+    private TempUserRepository tempUserRepository;
+
+    @Autowired
+    public void setTempUserRepository(TempUserRepository tempUserRepository) {
+        this.tempUserRepository = tempUserRepository;
+    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -41,6 +49,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User findByUsername(String username) {
         return userRepository.findOneByUsername(username);
+    }
+
+    public TempUser saveTempUser(TempUser tempUser){
+        return tempUserRepository.save(tempUser);
     }
 
     @Override

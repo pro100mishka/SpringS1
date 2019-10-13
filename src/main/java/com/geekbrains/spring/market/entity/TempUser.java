@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -19,10 +20,10 @@ public class TempUser {
 
     @Column(name = "email")
     @NotNull
+    @Email
     private String email;
 
-    @Column(name = "address")
-    @NotNull
-    private String address;
-
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
 }

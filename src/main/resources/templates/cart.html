@@ -38,7 +38,7 @@
                 <a th:href="@{/shop}" class="btn btn-danger" >Оформить заказ</a>
             </div>
             <div sec:authorize="isAnonymous()">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Add New Product</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Checkout</button>
                 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -56,12 +56,26 @@
                                         <input type="email" class="form-control" id="recipient-name" th:field="${tempUser.email}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="message-text" class="col-form-label">Адрес</label>
-                                        <input type="text" class="form-control" id="message-text" th:field="${tempUser.address}">
+                                        <label for="message-addressStreet" class="col-form-label">Address</label>
+                                        <input type="text" class="form-control" id="message-addressStreet" th:field="${tempUser.address.addressStreet}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-addressHome" class="col-form-label" >Address 2</label>
+                                        <input type="text" class="form-control" id="message-addressHome" th:field="${tempUser.address.addressHome}">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="message-city" class="col-form-label">City</label>
+                                            <input type="text" class="form-control" id="message-city" th:field="${tempUser.address.city}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-zipCode" class="col-form-label">Zip</label>
+                                            <input type="text" class="form-control" id="message-zipCode" th:field="${tempUser.address.zipCode}">
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Вернуться</button>
-                                        <input type="submit" class="btn btn-secondary" value="Оформить заказ">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Return</button>
+                                        <input type="submit" class="btn btn-secondary" value="Checkout">
                                     </div>
                                 </form>
                             </div>

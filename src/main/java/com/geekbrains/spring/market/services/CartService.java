@@ -1,7 +1,6 @@
 package com.geekbrains.spring.market.services;
 
 import com.geekbrains.spring.market.entity.cartItems.CartItems;
-import com.geekbrains.spring.market.entity.cartItems.CookieCartItem;
 import com.geekbrains.spring.market.entity.carts.Cart;
 import com.geekbrains.spring.market.entity.Product;
 import com.geekbrains.spring.market.entity.User;
@@ -13,8 +12,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -47,12 +44,24 @@ public class CartService {
         this.userService = userService;
     }
 
-    public Map getMapForPage(CookieUserHandler cookieUserHandler){
+    public Map<Product, CartItems> getMapForPage(CookieUserHandler cookieUserHandler){
         if (cookieUserHandler.getCart()!=null) return cartItemsService
                 .findCartMap(cookieUserHandler.getCart());
         if (cookieUserHandler.getCookieCart()!=null) return cartItemsService
                 .findCookieCartMap(cookieUserHandler.getCookieCart());
         return null;
+    }
+
+    public boolean delete(CookieUserHandler cookieUserHandler){
+        if (cookieUserHandler.getCart()!=null){
+            cartRepository.delete(cookieUserHandler.getCart());
+            return true;
+        }
+        if (cookieUserHandler.getCookieCart()!=null) {
+            cookieCartRepository.delete(cookieUserHandler.getCookieCart());
+            return true;
+        }
+        return false;
     }
 
     public Cart getCartByUser(String username){
@@ -89,8 +98,9 @@ public class CartService {
         Cart cart = getCartByUser(username);
         CookieCart cookieCart = cookieUserHandler.getCookieCart();
         if (cookieCart!=null){
-            cartItemsService.convertCookeCartItemToCartItem(cookieCart,cart);
+            cartItemsService.convertCookieCartItemToCartItem(cookieCart,cart);
             cookieCartRepository.delete(cookieCart);
+            cookieUserHandler.setCookieCart(null);
         }
         cookieUserHandler.setCart(cart);
     }

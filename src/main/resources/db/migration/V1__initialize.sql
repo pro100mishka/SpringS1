@@ -48,7 +48,7 @@ DROP TABLE IF EXISTS product;
 CREATE TABLE product (
     id bigserial,
     title varchar(255),
-    cost int,
+    cost decimal ,
     PRIMARY KEY (id));
 
 INSERT INTO product (title, cost) VALUES
@@ -68,8 +68,8 @@ DROP TABLE IF EXISTS cart_item;
 CREATE TABLE cart_item (
                            id bigserial,
                            quantity INT NOT NULL,
-                           cart_id int REFERENCES carts(id) ON DELETE CASCADE,,
-                           product_id int REFERENCES product (id) ON DELETE CASCADE,,
+                           cart_id int REFERENCES carts(id) ON DELETE CASCADE,
+                           product_id int REFERENCES product (id) ON DELETE CASCADE,
                            PRIMARY KEY (id));
 
 DROP TABLE IF EXISTS cookie_carts;
@@ -83,10 +83,46 @@ CREATE TABLE cookie_cart_item (
                            id bigserial,
                            quantity INT NOT NULL,
                            cart_id int REFERENCES cookie_carts(id) ON DELETE CASCADE,
-                           product_id int REFERENCES product (id) ON DELETE CASCADE,,
+                           product_id int REFERENCES product (id) ON DELETE CASCADE,
                            PRIMARY KEY (id));
 
 INSERT INTO cart_item (cart_id, product_id, quantity) VALUES
 (1,1,2);
 
+DROP TABLE IF EXISTS address;
+CREATE TABLE address(
+    id bigserial,
+    address_street varchar(255) NOT NULL,
+    address_home varchar(255) NOT NULL,
+    city varchar(255) NOT NULL,
+    zip_code varchar(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+
+DROP TABLE IF EXISTS temp_user;
+CREATE TABLE temp_user(
+    id bigserial,
+    email varchar(255),
+    address_id int REFERENCES address(id),
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS order_temp;
+CREATE TABLE order_temp(
+    id bigserial,
+    user_id int REFERENCES temp_user(id),
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS order_temp_items;
+CREATE TABLE order_temp_items(
+    id bigserial,
+    order_id int REFERENCES order_temp(id),
+    product_id int REFERENCES product(id),
+    price decimal,
+    total_price decimal,
+    quantity int,
+    PRIMARY KEY (id)
+);
 

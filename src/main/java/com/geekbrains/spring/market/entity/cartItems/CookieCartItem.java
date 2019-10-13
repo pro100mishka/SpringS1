@@ -30,9 +30,8 @@ public class CookieCartItem implements CartItems {
     @Column(name = "quantity")
     private int quantity;
 
-
-    public BigDecimal getTotalPrice() {
-        return new BigDecimal(product.getCost()*quantity);
+    public Double getTotalPrice() {
+        return product.getCost()*quantity;
     }
 
     @Override

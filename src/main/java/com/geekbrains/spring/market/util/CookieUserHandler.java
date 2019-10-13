@@ -18,7 +18,6 @@ import org.springframework.web.context.WebApplicationContext;
 @Accessors(chain = true)
 public class CookieUserHandler {
 
-
     private String sessionId;
 
     private Cart cart;

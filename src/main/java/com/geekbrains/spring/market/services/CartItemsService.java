@@ -50,7 +50,7 @@ public class CartItemsService {
         return cookieCartItemRepository.save(cookieCartItem);
     }
 
-    public void convertCookeCartItemToCartItem(CookieCart cookieCart, Cart cart){
+    public void convertCookieCartItemToCartItem(CookieCart cookieCart, Cart cart){
         List<CookieCartItem> cookieCartItems = cookieCartItemRepository.findAllByCookieCart(cookieCart);
         cookieCartItems.forEach(cookieCartItem -> {
             CartItem cartItem = cartItemRepository
