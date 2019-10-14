@@ -1,12 +1,10 @@
 package com.geekbrains.spring.market.controllers;
 
-import com.geekbrains.spring.market.entity.cartItems.CartItems;
-import com.geekbrains.spring.market.entity.carts.Cart;
-import com.geekbrains.spring.market.entity.cartItems.CartItem;
+import com.geekbrains.spring.market.entity.cart.item.CartItems;
 import com.geekbrains.spring.market.entity.Product;
-import com.geekbrains.spring.market.entity.TempUser;
+import com.geekbrains.spring.market.entity.user.TempUser;
 import com.geekbrains.spring.market.errors_handler.exceptions.NotFoundException;
-import com.geekbrains.spring.market.services.CartService;
+import com.geekbrains.spring.market.services.cart.CartService;
 import com.geekbrains.spring.market.services.ProductService;
 import com.geekbrains.spring.market.util.CookieUserHandler;
 import lombok.experimental.Accessors;

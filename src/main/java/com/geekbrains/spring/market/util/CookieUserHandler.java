@@ -1,7 +1,7 @@
 package com.geekbrains.spring.market.util;
 
-import com.geekbrains.spring.market.entity.carts.Cart;
-import com.geekbrains.spring.market.entity.carts.CookieCart;
+import com.geekbrains.spring.market.entity.cart.Cart;
+import com.geekbrains.spring.market.entity.cart.CookieCart;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;

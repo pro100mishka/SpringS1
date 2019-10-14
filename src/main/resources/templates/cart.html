@@ -35,7 +35,9 @@
                 </table>
             </div>
             <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/shop}" class="btn btn-danger" >Оформить заказ</a>
+                <form th:action="@{/order/userOrder}" method="POST">
+                    <input type="submit" class="btn btn-secondary" value="Checkout">
+                </form>
             </div>
             <div sec:authorize="isAnonymous()">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Checkout</button>

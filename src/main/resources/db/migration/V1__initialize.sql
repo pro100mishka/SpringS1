@@ -126,3 +126,20 @@ CREATE TABLE order_temp_items(
     PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS order_user;
+CREATE TABLE order_user(
+    id bigserial,
+    user_id int REFERENCES users(id),
+    PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS order_user_item;
+CREATE TABLE order_user_item(
+    id bigserial,
+    order_id int REFERENCES order_user(id),
+    product_id int REFERENCES product(id),
+    price decimal,
+    total_price decimal,
+    quantity int,
+    PRIMARY KEY (id)
+);

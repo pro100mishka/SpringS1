@@ -1,16 +1,16 @@
 package com.geekbrains.spring.market.entity.order;
 
-import com.geekbrains.spring.market.entity.user.TempUser;
+import com.geekbrains.spring.market.entity.user.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "order_temp")
+@Table(name = "order_user")
 @Data
 @Accessors(chain = true)
-public class OrderForTempUser {
+public class OrderForUser {
 
     @Id
     @Column(name = "id")
@@ -19,6 +19,6 @@ public class OrderForTempUser {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private TempUser tempUser;
+    private User user;
 
 }
